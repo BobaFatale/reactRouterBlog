@@ -11,13 +11,20 @@ class PostsNew extends Component {
           type='text'
           {...field.input}
         />
+        {field.meta.error}
       </div>
     )
   }
 
+  onSubmit(values) {
+    console.log(values);
+    
+  }
+
   render() {
+    const { handleSubmit } = this.props;
     return(
-      <form>
+      <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) } >
         <Field
           label='Title'
           name='title'
@@ -33,6 +40,7 @@ class PostsNew extends Component {
           name='content'
           component={this.renderField}
         />
+        <button type='submit' className='btn btn-primary'>Submit</button>
       </form>
     );
   }
@@ -40,7 +48,8 @@ class PostsNew extends Component {
 
 function validate(values) {
   const errors = {};
-
+  console.log('validate');
+  
   if (!values.title) {
     errors.title = 'Enter a Title!';
   }
@@ -48,10 +57,11 @@ function validate(values) {
     errors.categories = 'enter a category';
   }   
   if (!values.content) {
-    errors.categories = 'enter some content';
+    errors.content = 'enter some content';
   }
   return errors;
 }
 export default reduxForm({
+  validate,
   form: 'PostsNewForm'
 })(PostsNew);
